@@ -3,12 +3,12 @@ from Levenshtein import distance as lev
 import time
 import re
 import random
-import timeit
 from timeout import timeout
 import datetime
+import apikey
 
 VERSION = "en-lsv"
-APIKEY = "Token f562cf2d890151d682065696dacdc0f86938a18e"
+APIKEY = apikey.KEY
 HEADERS = {"Authorization": APIKEY}
 BIBLE_BOOKS = [
     "Genesis",
@@ -127,8 +127,9 @@ def parse_verse():
     pass_extract = re.split(r"\[\d{1,3}\]", str(passage[0]))
     simplified = re.sub(r"(^\s|\s{2,}|\s\(ESV\)$)", "", pass_extract[1])
     simplified2 = re.sub(r"(\\n|,[a-zA-Z])", " ", simplified)
-    if "(1)Footnotes" in simplified2:
+    if "Footnotes" in simplified2:
         new_list = simplified2.split("(1)Footnotes")[0]
+        new_list = new_list.replace("(1)", " ")
         print(new_list)
     else:
         new_list = simplified2
